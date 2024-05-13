@@ -1,0 +1,67 @@
+<?php
+declare(strict_types=1);
+class Address
+{
+    private string $building;
+    private string $house_number;
+    private string $road;
+    private string $suburb;
+    private string $city;
+    private string $municipality;
+    private string $state;
+    private string $ISO31662lvl4;
+    private string $postcode;
+    private string $country;
+    private string $country_code;
+
+    public function __construct($building, $house_number, $road, $suburb, $city, $municipality, $ISO31662lvl4,$postcode,$country,$country_code)
+    {
+        $this->building = $building;
+        $this->house_number = $house_number;
+        $this->road = $road;
+        $this->suburb = $suburb;
+        $this->city = $city;
+        $this->municipality = $municipality;
+        $this->postcode = $postcode;
+        $this->country = $country;
+        $this->country_code = $country_code;
+    }
+
+    public function getBuilding()
+    {
+        return $this->building;
+    }
+    public function getHouse_number()
+    {
+        return $this->house_number;
+    }
+    public function getRoad()
+    {
+        return $this->road;
+    }
+    public function getSuburb()
+    {
+        return $this->suburb;
+    }
+    public function getCity()
+    {
+        return $this->city;
+    }
+    public function getMunicipality()
+    {
+        return $this->municipality;
+    }
+    public function getPostcode()
+    {
+        return $this->postcode;
+    }
+    public function getCountry()
+    {
+        return $this->postcode;
+    }
+    public function getCountry_code()
+    {
+        return $this->country_code;
+    }
+}
+
