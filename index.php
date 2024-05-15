@@ -1,6 +1,6 @@
 <?php
 
-require ('helper\helper.php');
+#require ('helper\helper.php');
 
 $uri = @parse_url($_SERVER['REQUEST_URI'])['path'];
 
@@ -35,3 +35,43 @@ function error($code = 404)
 routeto($uri, $routes);
 
 #Refference
+
+/**
+ * This is an example of a front controller for a flat file PHP site. Using a
+ * Static list provides security against URL injection by default. See README.md
+ * for more examples.
+ */
+# [START gae_simple_front_controller]
+
+/*switch (@parse_url($_SERVER['REQUEST_URI'])['path']) {
+    case '/':
+        require 'views/homepage.php';
+        break;
+    case '':
+        require 'views/homepage.php';
+        break;
+    case '/register':
+        require 'views/register.php';
+        break;
+    case '/post-validation':
+        require 'helper/Post-validation.php';
+        break;
+    case '/mainpage':
+        require 'views/mainpage.php';
+        break;
+    case '/parkingspot':
+        require 'views/parkingspot.php';
+        break;
+    case '/logout':
+        require 'helper/logout.php';
+        break;
+    case '/profile':
+        require 'views/profile.php';
+        break;
+    default:
+        http_response_code(404);
+        exit('Not Found');
+}*/
+
+
+# [END gae_simple_front_controller]

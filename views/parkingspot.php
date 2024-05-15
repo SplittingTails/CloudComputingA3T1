@@ -1,6 +1,7 @@
 <?php
-require ('helper\DynamoDB.php');
-include ("header.php");
+require ('helper/DynamoDB.php');
+require ('helper/helper.php');
+include ("views/header.php");
 $kerbsideid = $_GET['id'];
 $region = 'us-east-1';
 $config = aws_Config();
@@ -75,6 +76,6 @@ if (isset($_SESSION['user'])) { ?>
 } else {
     header('Location: /');
 }
-include ("footer.php");
+include ("views/footer.php");
 
 ?>

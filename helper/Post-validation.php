@@ -1,7 +1,8 @@
 <?php
 session_start();
-require ('DynamoDB.php');
-require ('S3.php');
+require ('helper/DynamoDB.php');
+require ('helper/S3.php');
+require ('helper/helper.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $region = 'us-east-1';
@@ -12,7 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     unset($_SESSION['alerts']);
     //make alert error array
     $Alerts = array();
-
     /*** Register form ***/
     if ($_POST['register'] == "register") {
         $tableName2 = 'ParkSpots_users';
@@ -55,7 +55,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header('Location: /register');
             exit();
         } else {
-
             $DDbClient->putItem([
                 'Item' => [
                     'email' => [
@@ -77,7 +76,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header('Location: /');
             exit();
         }
-
     }
     /*** Login form ***/
     if ($_POST['login'] == "login") {
@@ -119,7 +117,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         exit();
     }
-
     if ($_POST['booking'] == "booking") {
         $tableName2 = 'ParkSpots_booking';
         $current_Datetime = date_create('now', timezone_open("Australia/Melbourne"));
@@ -198,7 +195,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'N' => $_POST['kerbsideid'],
                 ],
             ], 'bookinglist', 'L', [['M' => ['bookingid' => ['S' => $bookingID], 'enddatetime ' => ['S' => $uenddatetime->format('c')], 'email' => ['S' => $_SESSION['user']['email']], 'startdatetime' => ['S' => $ustartdatetime->format('c')]]]], true);
-
             $update = $DDbClient->updateItemAttributeByKey('ParkSpots_users', [
                 'email' => [
                     'S' => $_SESSION['user']['email']
@@ -208,9 +204,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
 
-
     }
-
     if ($_POST['removebooking'] == "removebooking") {
         if (empty($_POST['bookingid'])) {
             $Alerts['booking_error'] = "An internal server error, please try again.";
@@ -218,7 +212,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($_POST['index'])) {
             $Alerts['booking_error'] = "An internal server error, please try again.";
         }
-
         $queryResult = $DDbClient->query('ParkSpots_booking', [
             'Key' => [
                 'kerbsideid' => [
@@ -226,11 +219,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ],
             ],
         ]);
-        $queryResult = $DDbClient->unmarshalItem($queryResult);
+        #$queryResult = $DDbClient->unmarshalItem($queryResult);
 
         $index = 0;
-        foreach ($queryResult[0]['bookinglist'] as $item) {
-            if ($item['bookingid'] === $_POST['bookingid']) {
+
+        foreach ($queryResult['Items'][0]['bookinglist'] as $item) {
+            if ($item[0]['M']['bookingid']['S'] === $_POST['bookingid']) {
                 break;
             }
             $index++;
@@ -245,10 +239,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ],
                 'TableName' => 'ParkSpots_booking',
                 'UpdateExpression' => 'Remove bookinglist[' . $index . ']',
-
             ]
         );
-
         $remove = $DDbClient->removeItemfromlist(
             [
                 'Key' => [
@@ -259,12 +251,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'TableName' => 'ParkSpots_users',
                 'UpdateExpression' => 'Remove bookinglist[' . $_POST['index'] . ']',
             ]
-
         );
         header('Location: /profile');
     }
 }
-
 function test_input($data)
 {
     $data = trim($data);

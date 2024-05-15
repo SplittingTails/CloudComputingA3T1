@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
-require 'vendor\autoload.php';
+require 'vendor/autoload.php';
+
 use Aws\DynamoDb\DynamoDbClient;
 use Aws\DynamoDb\Marshaler;
 use LDAP\Result;
@@ -47,11 +48,11 @@ class DynamoDB
     }
 
 
-    public function scan(array $query = []): array
+    public function scan(array $query = [])
     {
-
-        $result = $this->DDbClient->scan($query);
-        return $this->unmarshalItem($result);
+        
+        return  $this->DDbClient->scan($query);
+        #return $this->unmarshalItem($result);
 
     }
 
@@ -208,6 +209,7 @@ class DynamoDB
         $data = [];
         foreach ($array['Items'] as $item) {
             $data[] = $this->marshal->unmarshalItem($item);
+            
         }
 
         return $data;

@@ -1,6 +1,7 @@
 <?php
-require ('helper\DynamoDB.php');
-include ("header.php");
+require ('helper/DynamoDB.php');
+require ('helper/helper.php');
+include ("views/header.php");
 $tableName2 = 'ParkSpots_users';
 $region = 'us-east-1';
 $config = aws_Config();
@@ -12,7 +13,7 @@ $documents = $DDbClient->query($tableName2, [
         ],
     ],
 ]);
-$documents = $DDbClient->unmarshalItem($documents);
+
 $index = 0;
 $count = 1;
 if (isset($_SESSION['user'])) { ?>
@@ -41,17 +42,18 @@ if (isset($_SESSION['user'])) { ?>
                         <tbody>
                             <?php
 
-                            foreach ($documents[0]['bookinglist'] as $item) {
+                            foreach ($documents['Items'][0]['bookinglist'] as $item) {
+      
                                 echo '<tr>';
                                 echo '<th scope="row">' . $count . '</th>';
-                                echo '<td>' . $item['kerbsideid'] . '</td>';
-                                echo '<td>' . $item['startdatetime'] . '</td>';
-                                echo '<td>' . $item['enddatetime '] . '</td>';
+                                echo '<td>' . $item[0]['M']['kerbsideid']['N'] . '</td>';
+                                echo '<td>' . $item[0]['M']['startdatetime']['S'] . '</td>';
+                                echo '<td>' . $item[0]['M']['enddatetime ']['S'] . '</td>';
                                 echo '<td>';
                                 echo '<form class="" action="/post-validation" method="post">';
-                                echo '<input type="hidden" id="bookingid" name="bookingid" value="' . $item['bookingid'] . '">';
+                                echo '<input type="hidden" id="bookingid" name="bookingid" value="' . $item[0]['M']['bookingid']['N'] . '">';
                                 echo '<input type="hidden" id="index" name="index" value="' . $index . '">';
-                                echo '<input type="hidden" id="kerbsideid" name="kerbsideid" value="' . $item['kerbsideid'] . '">';
+                                echo '<input type="hidden" id="kerbsideid" name="kerbsideid" value="' . $item[0]['M']['kerbsideid']['N'] . '">';
                                 echo '<button type="submit" name="removebooking" value="removebooking" class="btn btn-primary">Remove</button>';
                                 echo '</form>';
                                 echo '</td>';
@@ -69,5 +71,5 @@ if (isset($_SESSION['user'])) { ?>
 <?php } else {
     header('Location: /');
 }
-include ("footer.php");
+include ("views/footer.php");
 ?>

@@ -1,6 +1,7 @@
 <?php
-require ('helper\DynamoDB.php');
-include ("header.php");
+require ('helper/DynamoDB.php');
+require ('helper/helper.php');
+include ("views/header.php");
 $pageTitle = 'Main Page';
 /*** Configuration ***/
 $region = 'us-east-1';
@@ -9,9 +10,11 @@ $config = aws_Config();
 $DDbClient = new DynamoDB($config);
 $lastEvaluatedKey;
 $tableName = 'ParkSpots';
+
 $result = $DDbClient->scan([
     'TableName' => $tableName
 ]);
+
 // The page to display (Usually is received in a url parameter)
 $page = intval($_GET['page']);
 
@@ -19,7 +22,7 @@ $page = intval($_GET['page']);
 $page_size = 25;
 
 // Calculate total number of records, and total number of pages
-$total_records = count($result);
+$total_records = count($result['Items']);
 $total_pages = ceil($total_records / $page_size);
 
 // Validation: Page to display can not be greater than the total number of pages
@@ -36,7 +39,7 @@ if ($page < 1) {
 $offset = ($page - 1) * $page_size;
 $count = $offset + 1;
 // Get the subset of records to be displayed from the array
-$data = array_slice($result, $offset, $page_size);
+$data = array_slice($result['Items'], $offset, $page_size);
 
 
 
@@ -61,13 +64,13 @@ $data = array_slice($result, $offset, $page_size);
                 <tbody>
                     <?php foreach ($data as $name) {
                         echo '<tr>';
-                        echo '<th scope="row">'.$count.'</th>';
-                        echo '<td><a href=\'/parkingspot?id=' . $name['kerbsideid'] . '\'>' . $name['kerbsideid'] . '</a></td>';
-                        echo '<td><a href=\'/parkingspot?id=' . $name['kerbsideid'] . '\'>' . $name['address_components'][0]['short_name'] . '</a></td>';
-                        echo '<td><a href=\'/parkingspot?id=' . $name['kerbsideid'] . '\'>' . $name['address_components'][1]['short_name'] . '</a></td>';
-                        echo '<td><a href=\'/parkingspot?id=' . $name['kerbsideid'] . '\'>' . $name['address_components'][2]['short_name'] . '</a></td>';
-                        echo '<td><a href=\'/parkingspot?id=' . $name['kerbsideid'] . '\'>' . $name['address_components'][4]['short_name'] . '</a></td>';
-                        echo '<td><a href=\'/parkingspot?id=' . $name['kerbsideid'] . '\'>' . $name['address_components'][6]['short_name'] . '</a></td>';
+                        echo '<th scope="row">' . $count . '</th>';
+                        echo '<td><a href=\'/parkingspot?id=' . $name['kerbsideid']['N'] . '\'>' . $name['kerbsideid']['N'] . '</a></td>';
+                        echo '<td><a href=\'/parkingspot?id=' . $name['kerbsideid']['N'] . '\'>' . $name['address_components']['L'][0]['M']['short_name']['S'] . '</a></td>';
+                        echo '<td><a href=\'/parkingspot?id=' . $name['kerbsideid']['N'] . '\'>' . $name['address_components']['L'][1]['M']['short_name']['S'] . '</a></td>';
+                        echo '<td><a href=\'/parkingspot?id=' . $name['kerbsideid']['N'] . '\'>' . $name['address_components']['L'][2]['M']['short_name']['S'] . '</a></td>';
+                        echo '<td><a href=\'/parkingspot?id=' . $name['kerbsideid']['N'] . '\'>' . $name['address_components']['L'][4]['M']['short_name']['S'] . '</a></td>';
+                        echo '<td><a href=\'/parkingspot?id=' . $name['kerbsideid']['N'] . '\'>' . $name['address_components']['L'][6]['M']['short_name']['S'] . '</a></td>';
                         echo '</tr>';
                         $count++;
                     } ?>
@@ -87,4 +90,4 @@ $data = array_slice($result, $offset, $page_size);
 <?php } else {
     header('Location: /');
 } ?>
-<?php include ("footer.php");
+<?php include ("views/footer.php");

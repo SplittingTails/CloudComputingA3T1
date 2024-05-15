@@ -1,8 +1,8 @@
 <?php
 set_time_limit(500);
-include ("header.php");
-require ("seed\seed.php");
-seed();
+include ("views/header.php");
+require_once ("seed/seed.php");
+#seed();
 ?>
 
     <div class="w-50 position-absolute top-50 start-50 translate-middle">
@@ -30,4 +30,4 @@ seed();
     </div>
 
 
-<?php include ("footer.php"); ?>
+<?php include ("views/footer.php"); ?>

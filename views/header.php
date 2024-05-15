@@ -12,7 +12,7 @@ session_start();
   <link href="vendor\twbs\bootstrap\dist\css\bootstrap.min.css" rel="stylesheet">
 </head>
 <header>
-  <?php include ('views\Nav.php') ?>
+  <?php require ('views/Nav.php') ?>
 </header>
 
 <body>
