@@ -22,7 +22,10 @@ function dd($value)
 function aws_Config(): array
 {
 
-    
+    $region = 'us-east-1';
+    $key = '';
+    $secret = '';
+    $token = "";
     $region = 'us-east-1';
     $config = [
         'region' => $region,
