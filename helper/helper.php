@@ -24,7 +24,7 @@ function aws_Config(): array
 
     $region = 'us-east-1';
     $key = '';
-    $secret = '+5m9Fl9Hbjk+nU1rj';
+    $secret = '';
     $token = "";
     $region = 'us-east-1';
     $config = [
